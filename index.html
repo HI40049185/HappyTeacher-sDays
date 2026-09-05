@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Teacher's Day | Chiranjeevi Vamsy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Dynamic Theme Variables --- */
+        :root {
+            --bg-color: #030712; 
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-gold: #fbbf24;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --canvas-particle: rgba(56, 189, 248, 1);
+            --canvas-line: rgba(56, 189, 248, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc; 
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-blue: #0284c7;
+            --accent-gold: #b45309;
+            --glass-bg: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --canvas-particle: rgba(2, 132, 199, 1);
+            --canvas-line: rgba(2, 132, 199, 1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden; 
+            transition: background-color 0.5s ease, color 0.5s ease;
+            cursor: none;
+        }
+
+        /* --- Custom Glowing Cursor --- */
+        #customCursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px var(--accent-blue), 0 0 40px var(--accent-blue);
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            #customCursor { display: none; }
+            body, html { cursor: auto; }
+        }
+
+        /* --- The Moon Element --- */
+        .moon {
+            position: absolute;
+            top: 12%;
+            right: 15%;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #e2e8f0 60%, #94a3b8 100%);
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.3), inset -15px -15px 30px rgba(0,0,0,0.3);
+            z-index: 0;
+            transition: opacity 0.5s ease, transform 1.5s ease-out;
+            animation: floatMoon 6s ease-in-out infinite alternate;
+        }
+
+        [data-theme="light"] .moon {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.8);
+        }
+
+        @keyframes floatMoon {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(15px); }
+        }
+
+        /* --- Interactive Background --- */
+        #networkCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        /* --- Controls Toolbar --- */
+        .controls-wrapper {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            z-index: 10;
+            display: flex;
+            gap: 15px;
+            cursor: auto;
+        }
+
+        .control-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: var(--glass-border);
+        }
+
+        /* --- Main Content Container --- */
+        .tribute-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            pointer-events: none; 
+        }
+
+        /* --- Text Animations --- */
+        .animate-text {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            animation: slideInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.3s; }
+        .delay-2 { animation-delay: 0.8s; }
+        .delay-3 { animation-delay: 1.3s; }
+        .delay-4 { animation-delay: 1.8s; }
+        .delay-5 { animation-delay: 2.3s; }
+
+        @keyframes slideInUp {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* --- Typography Styles --- */
+        .greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            font-style: italic;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            background: linear-gradient(to right, var(--text-main), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
+        }
+
+        .mentor-name {
+            font-size: 2.2rem;
+            font-weight: 400;
+            margin-bottom: 25px;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        .mentor-name span {
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .message {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+            font-weight: 300;
+        }
+
+        /* --- Glassmorphism Profile Links --- */
+        .links-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            pointer-events: auto; 
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-link:hover { color: #fff; }
+
+        .profile-link.linkedin:hover {
+            background: #0077b5; border-color: #0077b5; transform: translateY(-5px);
+        }
+        .profile-link.youtube:hover {
+            background: #ff0000; border-color: #ff0000; transform: translateY(-5px);
+        }
+        .profile-link.website:hover {
+            background: var(--accent-gold); border-color: var(--accent-gold); transform: translateY(-5px); color: #000;
+        }
+        .profile-link.portfolio:hover {
+            background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-5px); color: #fff;
+        }
+
+        /* --- WhatsApp Group Thanks --- */
+        .whatsapp-thanks {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 25px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .whatsapp-thanks i {
+            color: #25D366; 
+            font-size: 1.1rem;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2.8rem; }
+            .mentor-name { font-size: 1.6rem; }
+            .message { font-size: 1rem; padding: 0 15px; }
+            .controls-wrapper { top: 15px; right: 20px; gap: 10px; }
+            .control-btn { width: 40px; height: 40px; font-size: 1rem; }
+            .moon { width: 100px; height: 100px; top: 10%; right: 10%; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Custom Glowing Cursor -->
+    <div id="customCursor"></div>
+
+    <!-- Controls Toolbar (Audio & Theme Toggles) -->
+    <div class="controls-wrapper">
+        <button class="control-btn" id="audioToggle" onclick="toggleAudio()" title="Toggle Ambient Hum">
+            <i class="fas fa-volume-mute" id="audioIcon"></i>
+        </button>
+        <button class="control-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fas fa-sun" id="themeIcon"></i>
+        </button>
+    </div>
+
+    <div class="moon"></div>
+
+    <canvas id="networkCanvas"></canvas>
+
+    <div class="tribute-container">
+        <div class="greeting animate-text delay-1">Wishing a very</div>
+        <h1 class="title animate-text delay-2">Happy Teacher's Day</h1>
+        <div class="mentor-name animate-text delay-3">
+            To our mentor, <span>Chiranjeevi Vamsy</span>
+        </div>
+        <p class="message animate-text delay-3">
+            Thank you for untangling complex concepts, sharing your deep expertise, and guiding your students toward excellence. Your dedication to teaching makes all the difference.
+        </p>
+
+        <div class="links-grid animate-text delay-4">
+            <a href="https://www.linkedin.com/in/chiranjeevi-vamsy/" target="_blank" class="profile-link linkedin">
+                <i class="fab fa-linkedin-in"></i> LinkedIn
+            </a>
+            <a href="https://www.youtube.com/@vamsychiranjeevi9619" target="_blank" class="profile-link youtube">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+            <a href="https://sqlserverentire.blogspot.com/" target="_blank" class="profile-link website">
+                <i class="fas fa-database"></i> SQL Blog
+            </a>
+            <!-- Added Portfolio Link -->
+            <a href="https://hi40049185.github.io/chiranjeevivamsy/" target="_blank" class="profile-link portfolio">
+                <i class="fas fa-briefcase"></i> View Portfolio
+            </a>
+        </div>
+
+        <div class="whatsapp-thanks animate-text delay-5">
+            <i class="fab fa-whatsapp"></i> A heartfelt thank you to all the members of this learning group for your constant guidance, valuable support, and for sharing your knowledge so generously. I’m truly grateful to be part of this wonderful learning community. 🙏📚
+        </div>
+    </div>
+
+    <script>
+        // --- Custom Cursor Tracking ---
+        const cursor = document.getElementById('customCursor');
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // --- Upgraded Ambient Audio: Soft Rain / Wind Soundscape ---
+        let audioCtx = null;
+        let noiseNode = null;
+        let filter = null;
+        let lfo = null;
+        let isAudioPlaying = false;
+
+        function toggleAudio() {
+            const icon = document.getElementById('audioIcon');
+            if (!isAudioPlaying) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const bufferSize = audioCtx.sampleRate * 5;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const output = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                noiseNode = audioCtx.createBufferSource();
+                noiseNode.buffer = buffer;
+                noiseNode.loop = true;
+
+                filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(300, audioCtx.currentTime);
+
+                const lfoGain = audioCtx.createGain();
+                lfoGain.gain.setValueAtTime(250, audioCtx.currentTime);
+
+                lfo = audioCtx.createOscillator();
+                lfo.frequency.setValueAtTime(0.15, audioCtx.currentTime); // Slow wave cycle (~6 seconds)
+                lfo.connect(lfoGain);
+                lfoGain.connect(filter.frequency);
+
+                const masterGain = audioCtx.createGain();
+                masterGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+                noiseNode.connect(filter);
+                filter.connect(masterGain);
+                masterGain.connect(audioCtx.destination);
+
+                noiseNode.start();
+                lfo.start();
+
+                isAudioPlaying = true;
+                icon.classList.remove('fa-volume-mute');
+                icon.classList.add('fa-volume-up');
+            } else {
+                if (noiseNode) {
+                    noiseNode.stop();
+                    noiseNode.disconnect();
+                }
+                if (lfo) {
+                    lfo.stop();
+                    lfo.disconnect();
+                }
+                if (audioCtx) audioCtx.close();
+                isAudioPlaying = false;
+                icon.classList.remove('fa-volume-up');
+                icon.classList.add('fa-volume-mute');
+            }
+        }
+
+        // --- Theme Toggle Logic ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        // --- Network Canvas Animation Logic ---
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        window.addEventListener('mouseout', function() {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+
+        window.addEventListener('resize', function(){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        // Function to dynamically get the particle/line color based on theme
+        function getParticleColor() {
+            return document.body.getAttribute('data-theme') === 'light' ? 'rgba(2, 132, 199, ' : 'rgba(56, 189, 248, ';
+        }
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = getParticleColor() + '1)';
+                ctx.fill();
+            }
+
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                
+                if (distance < mouse.radius + this.size) {
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 2;
+                    if (mouse.x > this.x && this.x > this.size * 10) this.x -= 2;
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 2;
+                    if (mouse.y > this.y && this.y > this.size * 10) this.y -= 2;
+                }
+                
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 1) - 0.5;
+                let directionY = (Math.random() * 1) - 0.5;
+                particlesArray.push(new Particle(x, y, directionX, directionY, size));
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            let baseColor = getParticleColor();
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = baseColor + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
